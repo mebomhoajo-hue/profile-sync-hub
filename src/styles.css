@@ -153,6 +153,7 @@
 
 /* Animated border lighting for the host panel */
 .host-lights {
+  isolation: isolate;
   padding: 2px;
   background: conic-gradient(
     from var(--lights-angle, 0deg),
@@ -163,6 +164,33 @@
     oklch(0.85 0.16 90)
   );
   animation: host-lights-spin 4s linear infinite;
+  box-shadow:
+    -5px 0 14px oklch(0.78 0.16 195 / 65%),
+    5px 0 14px oklch(0.68 0.23 5 / 65%);
+}
+
+.host-lights::before,
+.host-lights::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: 6%;
+  bottom: 6%;
+  width: 3px;
+  border-radius: 999px;
+  animation: host-side-pulse 1.4s ease-in-out infinite alternate;
+}
+
+.host-lights::before {
+  left: 1px;
+  background: linear-gradient(to bottom, transparent, oklch(0.88 0.17 195), oklch(0.92 0.15 90), transparent);
+  box-shadow: 0 0 7px 2px oklch(0.78 0.16 195 / 90%);
+}
+
+.host-lights::after {
+  right: 1px;
+  background: linear-gradient(to bottom, transparent, oklch(0.82 0.2 330), oklch(0.78 0.2 25), transparent);
+  box-shadow: 0 0 7px 2px oklch(0.68 0.23 5 / 90%);
 }
 
 @property --lights-angle {
@@ -174,5 +202,22 @@
 @keyframes host-lights-spin {
   to {
     --lights-angle: 360deg;
+  }
+}
+
+@keyframes host-side-pulse {
+  from {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .host-lights,
+  .host-lights::before,
+  .host-lights::after {
+    animation: none;
   }
 }

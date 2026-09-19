@@ -27,6 +27,17 @@ function CoinIcon() {
   );
 }
 
+function formatCoins(slot: LiveSlot, now: number) {
+  if (!slot.username) return "0";
+
+  const startedAt = slot.updated_at ? new Date(slot.updated_at).getTime() : now;
+  const elapsed = Number.isFinite(startedAt) ? Math.max(0, now - startedAt) : 0;
+  const coins = Math.min(1_000_000, Math.floor(elapsed / 1_500) * 40_000);
+
+  if (coins >= 1_000_000) return "1M";
+  return coins === 0 ? "0" : `${coins / 1_000}K`;
+}
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -48,7 +59,7 @@ export const Route = createFileRoute("/")({
   component: LiveRoom,
 });
 
-function GuestTile({ slot }: { slot: LiveSlot }) {
+function GuestTile({ slot, now }: { slot: LiveSlot; now: number }) {
   const src = avatarUrl(slot);
 
   if (!src) {
@@ -70,7 +81,7 @@ function GuestTile({ slot }: { slot: LiveSlot }) {
       <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/70" />
       <div className="absolute left-1.5 top-1.5 flex items-center gap-1 rounded-full bg-chip px-1.5 py-0.5 text-[10px] font-semibold text-white backdrop-blur">
         <CoinIcon />
-        {slot.viewers ?? "0"}
+        {formatCoins(slot, now)}
       </div>
       <div className="absolute inset-0 flex items-center justify-center">
         <img
@@ -94,6 +105,7 @@ function GuestTile({ slot }: { slot: LiveSlot }) {
 
 function LiveRoom() {
   const [slots, setSlots] = useState<LiveSlot[]>([]);
+  const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
     let active = true;
@@ -120,6 +132,11 @@ function LiveRoom() {
     };
   }, []);
 
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(Date.now()), 500);
+    return () => window.clearInterval(timer);
+  }, []);
+
   const filled: LiveSlot[] =
     slots.length === 6
       ? slots
@@ -130,6 +147,7 @@ function LiveRoom() {
           viewers: null,
           source: "tiktok",
           muted: false,
+           updated_at: undefined,
         }));
 
   return (
@@ -147,7 +165,7 @@ function LiveRoom() {
         </div>
         <div className="grid w-1/2 grid-cols-2 gap-1.5">
           {filled.map((slot) => (
-            <GuestTile key={slot.slot_number} slot={slot} />
+            <GuestTile key={slot.slot_number} slot={slot} now={now} />
           ))}
         </div>
       </div>
