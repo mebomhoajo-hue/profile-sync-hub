@@ -62,9 +62,7 @@ function GuestTile({ slot }: { slot: LiveSlot }) {
           </span>
           <span className="text-[11px] text-muted-foreground">+</span>
         </div>
-        <span className="text-[11px] text-muted-foreground">
-          {slot.muted ? "🔇" : "🎙"}
-        </span>
+          {slot.muted && <span className="text-[11px] text-muted-foreground">🔇</span>}
       </div>
     </div>
   );
@@ -115,12 +113,6 @@ function LiveRoom() {
       <div className="flex gap-1.5 p-1.5">
         <div className="relative w-1/2 overflow-hidden rounded-xl bg-[linear-gradient(160deg,oklch(0.78_0.09_60),oklch(0.68_0.11_55))]">
           <div className="aspect-[9/16]" />
-          <div className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-live px-2 py-0.5 text-[10px] font-bold text-live-foreground">
-            LIVE
-          </div>
-          <div className="absolute inset-x-0 bottom-2 text-center text-[11px] font-medium text-black/60">
-            Host camera
-          </div>
         </div>
         <div className="grid w-1/2 grid-cols-2 gap-1.5">
           {filled.map((slot) => (
