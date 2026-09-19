@@ -14,7 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      live_slots: {
+        Row: {
+          display_name: string | null
+          muted: boolean
+          slot_number: number
+          source: string
+          updated_at: string
+          username: string | null
+          viewers: string | null
+        }
+        Insert: {
+          display_name?: string | null
+          muted?: boolean
+          slot_number: number
+          source?: string
+          updated_at?: string
+          username?: string | null
+          viewers?: string | null
+        }
+        Update: {
+          display_name?: string | null
+          muted?: boolean
+          slot_number?: number
+          source?: string
+          updated_at?: string
+          username?: string | null
+          viewers?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
