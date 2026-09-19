@@ -24,13 +24,6 @@ export const Route = createFileRoute("/")({
   component: LiveRoom,
 });
 
-const CHAT = [
-  { name: "Desi gemoy", level: 1, text: "mau", joined: false },
-  { name: "Desi gemoy", level: 1, text: "mau", joined: false },
-  { name: "sitti", level: 2, text: "mau", joined: false },
-  { name: "MoRiS", level: 9, text: "", joined: true },
-];
-
 function GuestTile({ slot }: { slot: LiveSlot }) {
   const src = avatarUrl(slot);
 
