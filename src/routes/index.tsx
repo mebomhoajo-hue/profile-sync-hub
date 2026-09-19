@@ -2,6 +2,30 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { avatarUrl, fetchSlots, type LiveSlot } from "@/lib/liveSlots";
+import hostKing from "@/assets/host-dubai-king.jpg";
+
+function CoinIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-3 w-3 shrink-0" aria-hidden="true">
+      <circle cx="12" cy="12" r="11" fill="#2fc9b8" />
+      <circle cx="12" cy="12" r="11" fill="url(#coinShade)" />
+      <circle cx="12" cy="12" r="7.5" fill="none" stroke="#0e4f47" strokeWidth="1.6" />
+      <path
+        d="M12 6.4v11.2M14.8 8.9c-.5-.9-1.6-1.4-2.8-1.4-1.6 0-2.9.8-2.9 2.1 0 2.9 5.8 1.5 5.8 4.4 0 1.3-1.3 2.1-2.9 2.1-1.4 0-2.6-.6-3-1.6"
+        fill="none"
+        stroke="#0e4f47"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <defs>
+        <linearGradient id="coinShade" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#8ff5e6" stopOpacity="0.9" />
+          <stop offset="1" stopColor="#0e4f47" stopOpacity="0.35" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -44,8 +68,8 @@ function GuestTile({ slot }: { slot: LiveSlot }) {
         className="absolute inset-0 h-full w-full scale-110 object-cover opacity-40 blur-xl"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/70" />
-      <div className="absolute left-1.5 top-1.5 flex items-center gap-1 rounded-full bg-chip px-1.5 py-0.5 text-[10px] font-medium backdrop-blur">
-        <span className="inline-block h-2.5 w-2.5 rounded-full bg-accent" />
+      <div className="absolute left-1.5 top-1.5 flex items-center gap-1 rounded-full bg-chip px-1.5 py-0.5 text-[10px] font-semibold text-white backdrop-blur">
+        <CoinIcon />
         {slot.viewers ?? "0"}
       </div>
       <div className="absolute inset-0 flex items-center justify-center">
@@ -111,7 +135,14 @@ function LiveRoom() {
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col bg-background text-foreground">
       <div className="flex gap-1.5 p-1.5">
-        <div className="relative w-1/2 overflow-hidden rounded-xl bg-[linear-gradient(160deg,oklch(0.78_0.09_60),oklch(0.68_0.11_55))]">
+        <div className="host-lights relative w-1/2 overflow-hidden rounded-xl">
+          <img
+            src={hostKing}
+            alt="Host"
+            width={768}
+            height={1024}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
           <div className="aspect-[9/16]" />
         </div>
         <div className="grid w-1/2 grid-cols-2 gap-1.5">
