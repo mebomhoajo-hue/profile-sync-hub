@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { avatarUrl, fetchSlots, type LiveSlot } from "@/lib/liveSlots";
@@ -23,13 +23,6 @@ export const Route = createFileRoute("/")({
   }),
   component: LiveRoom,
 });
-
-const CHAT = [
-  { name: "Desi gemoy", level: 1, text: "mau", joined: false },
-  { name: "Desi gemoy", level: 1, text: "mau", joined: false },
-  { name: "sitti", level: 2, text: "mau", joined: false },
-  { name: "MoRiS", level: 9, text: "", joined: true },
-];
 
 function GuestTile({ slot }: { slot: LiveSlot }) {
   const src = avatarUrl(slot);
@@ -136,52 +129,6 @@ function LiveRoom() {
         </div>
       </div>
 
-      <div className="flex-1 space-y-3 px-3 py-4">
-        {CHAT.map((m, i) => (
-          <div key={i} className="flex items-start gap-2">
-            <div className="h-7 w-7 shrink-0 rounded-full bg-muted" />
-            <div className="min-w-0">
-              <div className="flex items-center gap-1.5">
-                <span className="rounded bg-[oklch(0.45_0.15_265)] px-1 text-[10px] font-bold">
-                  ▲ {m.level}
-                </span>
-                <span className="text-sm font-semibold text-muted-foreground">
-                  {m.name}
-                </span>
-                {m.joined && (
-                  <span className="text-sm font-semibold">joined</span>
-                )}
-              </div>
-              {m.text && <p className="text-sm">{m.text}</p>}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="sticky bottom-0 flex items-center gap-2 bg-background px-3 py-3">
-        <div className="flex flex-1 items-center rounded-full bg-secondary px-4 py-2.5 text-sm text-muted-foreground">
-          Type...
-          <span className="ml-auto">🙂</span>
-        </div>
-        <button className="grid h-10 w-10 place-items-center rounded-full bg-secondary text-lg">
-          👥
-        </button>
-        <button className="grid h-10 w-10 place-items-center rounded-full bg-secondary text-lg">
-          🌹
-        </button>
-        <button className="grid h-10 w-10 place-items-center rounded-full bg-secondary text-lg">
-          🎁
-        </button>
-      </div>
-
-      <div className="pb-4 text-center">
-        <Link
-          to="/admin"
-          className="text-xs text-muted-foreground underline underline-offset-4"
-        >
-          Admin panel
-        </Link>
-      </div>
     </div>
   );
 }
