@@ -145,7 +145,6 @@ function LiveRoom() {
           viewers: null,
           source: "tiktok",
           muted: false,
-           updated_at: undefined,
         }));
 
   return (
