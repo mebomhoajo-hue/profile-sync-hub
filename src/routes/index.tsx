@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { avatarUrl, fetchSlots, type LiveSlot } from "@/lib/liveSlots";
 import hostKing from "@/assets/host-dubai-king.jpg";
-import lionOverlay from "@/assets/lion-guest-overlay.mp4.asset.json";
+import lionOverlay from "@/assets/lion-guest-overlay.webm.asset.json";
 
 function CoinIcon() {
   return (
