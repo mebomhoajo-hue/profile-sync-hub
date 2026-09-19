@@ -153,6 +153,7 @@ function LiveRoom() {
       const video = lionVideo.current;
       if (!video) return;
       video.muted = false;
+      video.volume = 1;
       void video.play().catch(() => undefined);
     };
 
@@ -194,21 +195,25 @@ function LiveRoom() {
               now={now}
             />
           ))}
-          {showLion && (
-            <div className="lion-overlay" aria-hidden="true">
-              <video
-                key={lionCycle}
-                ref={lionVideo}
-                src={lionOverlay.url}
-                autoPlay
-                playsInline
-                preload="auto"
-                onEnded={() => setShowLion(false)}
-              />
-            </div>
-          )}
         </div>
       </div>
+
+      {showLion && (
+        <div className="lion-stage" aria-hidden="true">
+          <video
+            key={lionCycle}
+            ref={lionVideo}
+            src={lionOverlay.url}
+            autoPlay
+            playsInline
+            preload="auto"
+            onLoadedMetadata={(event) => {
+              event.currentTarget.volume = 1;
+            }}
+            onEnded={() => setShowLion(false)}
+          />
+        </div>
+      )}
 
     </div>
   );
