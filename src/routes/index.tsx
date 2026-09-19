@@ -27,11 +27,8 @@ function CoinIcon() {
   );
 }
 
-function formatCoins(slot: LiveSlot, now: number) {
-  if (!slot.username) return "0";
-
-  const startedAt = slot.updated_at ? new Date(slot.updated_at).getTime() : now;
-  const elapsed = Number.isFinite(startedAt) ? Math.max(0, now - startedAt) : 0;
+function formatCoins(startedAt: number, now: number) {
+  const elapsed = Math.max(0, now - startedAt);
   const coins = Math.min(1_000_000, Math.floor(elapsed / 1_500) * 40_000);
 
   if (coins >= 1_000_000) return "1M";
@@ -61,6 +58,7 @@ export const Route = createFileRoute("/")({
 
 function GuestTile({ slot, now }: { slot: LiveSlot; now: number }) {
   const src = avatarUrl(slot);
+  const [startedAt] = useState(() => Date.now());
 
   if (!src) {
     return (
@@ -81,7 +79,7 @@ function GuestTile({ slot, now }: { slot: LiveSlot; now: number }) {
       <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/70" />
       <div className="absolute left-1.5 top-1.5 flex items-center gap-1 rounded-full bg-chip px-1.5 py-0.5 text-[10px] font-semibold text-white backdrop-blur">
         <CoinIcon />
-        {formatCoins(slot, now)}
+        {formatCoins(startedAt, now)}
       </div>
       <div className="absolute inset-0 flex items-center justify-center">
         <img
@@ -165,7 +163,11 @@ function LiveRoom() {
         </div>
         <div className="grid w-1/2 grid-cols-2 gap-1.5">
           {filled.map((slot) => (
-            <GuestTile key={slot.slot_number} slot={slot} now={now} />
+            <GuestTile
+              key={`${slot.slot_number}:${slot.username ?? "empty"}:${slot.updated_at ?? "new"}`}
+              slot={slot}
+              now={now}
+            />
           ))}
         </div>
       </div>
