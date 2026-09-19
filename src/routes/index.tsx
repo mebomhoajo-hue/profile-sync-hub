@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { avatarUrl, fetchSlots, type LiveSlot } from "@/lib/liveSlots";
 import hostKing from "@/assets/host-dubai-king.jpg";
+import lionOverlay from "@/assets/lion-guest-overlay.webm.asset.json";
 
 function CoinIcon() {
   return (
@@ -104,6 +105,9 @@ function GuestTile({ slot, now }: { slot: LiveSlot; now: number }) {
 function LiveRoom() {
   const [slots, setSlots] = useState<LiveSlot[]>([]);
   const [now, setNow] = useState(() => Date.now());
+  const [lionCycle, setLionCycle] = useState(0);
+  const [showLion, setShowLion] = useState(true);
+  const lionVideo = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     let active = true;
@@ -135,6 +139,28 @@ function LiveRoom() {
     return () => window.clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    const replay = window.setInterval(() => {
+      setLionCycle((cycle) => cycle + 1);
+      setShowLion(true);
+    }, 15_000);
+
+    return () => window.clearInterval(replay);
+  }, []);
+
+  useEffect(() => {
+    const playWithSound = () => {
+      const video = lionVideo.current;
+      if (!video) return;
+      video.muted = false;
+      void video.play().catch(() => undefined);
+    };
+
+    playWithSound();
+    window.addEventListener("pointerdown", playWithSound, { once: true });
+    return () => window.removeEventListener("pointerdown", playWithSound);
+  }, [lionCycle]);
+
   const filled: LiveSlot[] =
     slots.length === 6
       ? slots
@@ -160,7 +186,7 @@ function LiveRoom() {
           />
           <div className="aspect-[9/16]" />
         </div>
-        <div className="grid w-1/2 grid-cols-2 gap-1.5">
+        <div className="relative grid w-1/2 grid-cols-2 gap-1.5 overflow-hidden rounded-xl">
           {filled.map((slot) => (
             <GuestTile
               key={`${slot.slot_number}:${slot.username ?? "empty"}:${slot.updated_at ?? "new"}`}
@@ -168,6 +194,19 @@ function LiveRoom() {
               now={now}
             />
           ))}
+          {showLion && (
+            <div className="lion-overlay" aria-hidden="true">
+              <video
+                key={lionCycle}
+                ref={lionVideo}
+                src={lionOverlay.url}
+                autoPlay
+                playsInline
+                preload="auto"
+                onEnded={() => setShowLion(false)}
+              />
+            </div>
+          )}
         </div>
       </div>
 
