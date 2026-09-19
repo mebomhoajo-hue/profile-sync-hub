@@ -7,6 +7,7 @@ export type LiveSlot = {
   viewers: string | null;
   source: string;
   muted: boolean;
+  updated_at?: string;
 };
 
 export const AVATAR_SOURCES = [
@@ -28,7 +29,7 @@ export function avatarUrl(slot: LiveSlot): string | null {
 export async function fetchSlots(): Promise<LiveSlot[]> {
   const { data, error } = await supabase
     .from("live_slots")
-    .select("slot_number, username, display_name, viewers, source, muted")
+    .select("slot_number, username, display_name, viewers, source, muted, updated_at")
     .order("slot_number");
   if (error) throw error;
   return (data ?? []) as LiveSlot[];

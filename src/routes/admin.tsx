@@ -152,16 +152,9 @@ function AdminPanel() {
             />
           </label>
 
-          <label className="block text-sm">
-            <span className="mb-1 block text-muted-foreground">Viewer count</span>
-            <input
-              value={current.viewers ?? ""}
-              maxLength={12}
-              placeholder="603,8K"
-              onChange={(e) => patch({ viewers: e.target.value })}
-              className="w-full rounded-lg border border-border bg-input px-3 py-2 text-foreground placeholder:text-muted-foreground"
-            />
-          </label>
+          <p className="rounded-lg border border-border bg-muted px-3 py-2 text-xs text-muted-foreground">
+            Guest coins start at 0 and rise automatically after saving.
+          </p>
 
           <label className="flex items-center gap-2 text-sm">
             <input
